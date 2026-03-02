@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tsunami · Performance Paket</title>
+  <!-- Fonts, Icons, scharfes Design -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- RESET & GRUNDLAGEN ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #0a141c;
+      color: #e6f3ff;
+      line-height: 1.5;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ---------- CANVAS HINTERGRUND (dekorativ, scharf) ---------- */
+    #waveCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      display: block;
+      opacity: 0.5;
+    }
+
+    /* ---------- HAUPTLAYOUT ---------- */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2rem 2rem 1rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-size: clamp(5rem, 20vw, 9rem);
+      font-weight: 900;
+      letter-spacing: 12px;
+      text-transform: uppercase;
+      background: linear-gradient(145deg, #b5f0ff, #3bc0ff, #0077be, #00c8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 10px #0077ff, 0 0 30px #003cff;
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
+      filter: drop-shadow(0 4px 6px #00000050);
+    }
+
+    .badge {
+      background: rgba(0, 150, 255, 0.15);
+      backdrop-filter: blur(4px);
+      border: 1px solid #00eeff40;
+      padding: 0.3rem 2rem;
+      border-radius: 40px;
+      display: inline-block;
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: #b3f0ff;
+      box-shadow: 0 0 15px cyan;
+    }
+
+    /* ---------- DOWNLOAD-BUTTON ---------- */
+    .download-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0 4rem;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: rgba(0, 30, 50, 0.5);
+      border: 2px solid #00d0ff;
+      border-radius: 60px;
+      padding: 1.2rem 2.8rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 30px #00b8ff, 0 12px 25px -8px black;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      border-bottom: 4px solid #9eefff;
+      min-width: 260px;
+    }
+
+    .download-btn i {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 8px cyan);
+    }
+
+    .download-btn:hover {
+      background: rgba(0, 180, 240, 0.7);
+      border-color: #ffffff;
+      box-shadow: 0 0 50px #0ff, 0 18px 30px -6px black;
+      transform: translateY(-4px) scale(1.02);
+      border-bottom-width: 6px;
+    }
+
+    .download-btn:active {
+      transform: translateY(2px) scale(0.98);
+      box-shadow: 0 0 40px #00a6ff;
+    }
+
+    /* ---------- FEATURE-KACHELN (Performance-Optimierungen) ---------- */
+    .feature-title {
+      text-align: center;
+      font-size: 2.2rem;
+      margin: 4rem 0 2rem;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,50,70,0.5);
+      padding: 0.5rem 2.5rem;
+      border-radius: 50px;
+      border: 1px solid cyan;
+      backdrop-filter: blur(5px);
+      white-space: nowrap;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0 3rem;
+    }
+
+    .feature-card {
+      background: rgba(0, 30, 50, 0.5);
+      backdrop-filter: blur(6px);
+      border: 1px solid #00a6ff60;
+      border-radius: 30px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+      box-shadow: 0 15px 30px -10px #00000080;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #0ff;
+      box-shadow: 0 0 35px #00a6ff, 0 20px 30px -8px black;
+      background: rgba(0, 50, 80, 0.7);
+    }
+
+    .feature-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: #7fd4ff;
+      filter: drop-shadow(0 0 12px #0ff);
+    }
+
+    .feature-card h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: #e0f5ff;
+    }
+
+    .feature-card p {
+      font-size: 1rem;
+      color: #c0dfff;
+      opacity: 0.9;
+    }
+
+    /* ---------- FAKTEN / COUNTER (ohne Pixel-Unschärfe) ---------- */
+    .facts-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+
+    .fact-item {
+      background: rgba(0, 30, 50, 0.4);
+      backdrop-filter: blur(5px);
+      border: 1px solid #0ff3;
+      border-radius: 40px;
+      padding: 1.2rem 2.5rem;
+      min-width: 180px;
+      transition: 0.2s;
+    }
+
+    .fact-item:hover {
+      background: rgba(0, 60, 90, 0.7);
+      border-color: #0ff;
+    }
+
+    .fact-number {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #aaf0ff;
+      text-shadow: 0 0 15px cyan;
+      line-height: 1.2;
+    }
+
+    .fact-label {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #b0e5ff;
+    }
+
+    /* ---------- TECHNISCHE DATEN (Paket-Details) ---------- */
+    .specs-section {
+      margin: 4rem 0;
+      background: rgba(0, 15, 25, 0.6);
+      backdrop-filter: blur(5px);
+      border-radius: 40px;
+      padding: 2rem 2rem 1.5rem;
+      border: 1px solid #00a6ff60;
+    }
+
+    .specs-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem 2rem;
+    }
+
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px dashed #0ff5;
+      font-size: 1.2rem;
+    }
+
+    .spec-label {
+      font-weight: 300;
+      color: #b0e9ff;
+    }
+
+    .spec-value {
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 0 6px cyan;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer {
+      margin-top: 5rem;
+      padding: 2rem 0;
+      text-align: center;
+      border-top: 1px solid #0ff4;
+      font-size: 1rem;
+      color: #9ac7e0;
+      background: rgba(0, 10, 20, 0.5);
+      backdrop-filter: blur(4px);
+      border-radius: 60px 60px 0 0;
+    }
+
+    .footer a {
+      color: #0ff;
+      text-decoration: none;
+      border-bottom: 1px dotted;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 700px) {
+      .container { padding: 1rem; }
+      h1 { font-size: 4.5rem; letter-spacing: 5px; }
+      .download-area { gap: 1rem; }
+      .download-btn { font-size: 1.3rem; padding: 1rem 1.5rem; min-width: 200px; }
+      .feature-title { font-size: 1.6rem; white-space: normal; }
+      .facts-row { gap: 1rem; }
+      .fact-item { padding: 0.8rem 1.2rem; }
+      .fact-number { font-size: 2rem; }
+      .specs-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 450px) {
+      h1 { font-size: 3.2rem; }
+      .badge { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas für dekorativen Hintergrund -->
+  <canvas id="waveCanvas"></canvas>
+
+  <div class="container">
+    <!-- HEADER -->
+    <header class="header">
+      <h1>TSUNAMI</h1>
+      <span class="badge"><i class="fa-regular fa-folder-open"></i>  Tsunami  <i class="fa-regular fa-folder-open"></i></span>
+    </header>
+
+    <!-- DOWNLOAD BUTTON (tsunami.zip) -->
+    <div class="download-area">
+      <a href="Tsunami-1.0.jar" download="Tsunami-1.0.jar" class="download-btn">
+        <i class="fas fa-download"></i> Download Tsunami
+        <i class="fas fa-file-zipper"></i>
+      </a>
+    </div>
+
+    <!-- FEATURE-KACHELN – was JEDER in Minecraft will: FPS Boost & mehr -->
+    <h2 class="feature-title"><i class="fa-regular fa-star" style="margin-right: 15px;"></i> OPTIMIERUNGEN, DIE JEDER LIEBT <i class="fa-regular fa-star" style="margin-left: 15px;"></i></h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+        <h3>FPS Booster</h3>
+        <p>Fortschrittliche Algorithmen verdoppeln deine Bildrate – selbst auf schwacher Hardware.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-microchip"></i></div>
+        <h3>RAM Optimizer</h3>
+        <p>Intelligentes Speichermanagement reduziert Lag-Spikes und Ruckler.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-paint-brush"></i></div>
+        <h3>Shader-Tuning</h3>
+        <p>Atemberaubende Grafik bei maximaler Leistung – vorkonfiguriert für jede GPU.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-clock"></i></div>
+        <h3>Latenz-Killer</h3>
+        <p>Reduziert Ticks und Rendering-Zeit für flüssigeres Gameplay.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+        <h3>Auto-Config</h3>
+        <p>Erkennt deine Hardware und stellt alle Grafikeinstellungen optimal ein.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-cloud-sun"></i></div>
+        <h3>Wetter-Effekte</h3>
+        <p>Schönere Partikel und Animationen ohne Performance-Verlust.</p>
+      </div>
+    </div>
+
+    <!-- FAKTEN-COUNTER (angepasst, ohne Pixel-Unschärfe) -->
+    <div class="facts-row">
+      <div class="fact-item">
+        <div class="fact-number">13</div>
+        <div class="fact-label">Downloads (Woche)</div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-number">4.7</div>
+        <div class="fact-label">Bewertung</div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-number">∞</div>
+        <div class="fact-label">Spielspaß</div>
+      </div>
+    </div>
+
+    <!-- TECHNISCHE DATEN ZUM PERFORMANCE PAKET -->
+    <div class="specs-section">
+      <div class="specs-title">
+        <i class="fas fa-gear" style="color: #0ff;"></i>  Paket-Details
+        <i class="fas fa-gear" style="color: #0ff; margin-left: auto;"></i>
+      </div>
+      <div class="specs-grid">
+        <div class="spec-item"><span class="spec-label">Version</span><span class="spec-value">3.1.9</span></div>
+        <div class="spec-item"><span class="spec-label">Größe</span><span class="spec-value">~ 312 MB</span></div>
+        <div class="spec-item"><span class="spec-label">Kompatibel mit</span><span class="spec-value">Minecraft 1.20+</span></div>
+        <div class="spec-item"><span class="spec-label">Letztes Update</span><span class="spec-value">15.02.2026</span></div>
+        <div class="spec-item"><span class="spec-label">Lizenz</span><span class="spec-value">Freeware / Open Source</span></div>
+        <div class="spec-item"><span class="spec-label">Support</span><span class="spec-value">Discord & Wiki</span></div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <i class="fa-regular fa-compass"></i> Tsunami - Die Welle ist blau
+      <br><span style="opacity: 0.5; font-size: 0.8rem;">Made for Tsunami · 2026</span>
+    </footer>
+  </div>
+
+  <!-- ---------- JAVASCRIPT FÜR HINTERGRUND-CANVAS (dekorativ) ---------- -->
+  <script>
+    (function() {
+      const bgCanvas = document.getElementById('waveCanvas');
+      const bgCtx = bgCanvas.getContext('2d');
+      let width, height;
+
+      function resizeBg() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        bgCanvas.width = width;
+        bgCanvas.height = height;
+      }
+      window.addEventListener('resize', resizeBg);
+      resizeBg();
+
+      let time = 0;
+      function drawBg() {
+        if (!bgCtx) return;
+        bgCtx.clearRect(0, 0, width, height);
+        
+        const gradient = bgCtx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(0, '#021826');
+        gradient.addColorStop(0.7, '#0a2e42');
+        bgCtx.fillStyle = gradient;
+        bgCtx.fillRect(0, 0, width, height);
+
+        bgCtx.lineWidth = 1.8;
+        bgCtx.shadowColor = '#00c3ff';
+        bgCtx.shadowBlur = 10;
+        bgCtx.shadowOffsetX = 0;
+        bgCtx.shadowOffsetY = 0;
+
+        for (let j = 0; j < 6; j++) {
+          bgCtx.beginPath();
+          for (let x = 0; x < width; x += 25) {
+            const y = height * 0.3 + j * 50 + Math.sin(x * 0.005 + time + j) * 25 + Math.sin(x * 0.01 + j*2) * 15;
+            if (x === 0) bgCtx.moveTo(x, y);
+            else bgCtx.lineTo(x, y);
+          }
+          bgCtx.strokeStyle = `rgba(100, 220, 255, ${0.2 + j*0.05})`;
+          bgCtx.stroke();
+        }
+
+        for (let j = 0; j < 4; j++) {
+          bgCtx.beginPath();
+          for (let x = 0; x < width; x += 20) {
+            const y = height * 0.7 + j * 20 + Math.cos(x * 0.008 + time * 1.3 + j) * 20 + Math.sin(x * 0.02) * 12;
+            if (x === 0) bgCtx.moveTo(x, y);
+            else bgCtx.lineTo(x, y);
+          }
+          bgCtx.strokeStyle = `rgba(0, 255, 255, ${0.15 + j*0.03})`;
+          bgCtx.stroke();
+        }
+
+        time += 0.02;
+        requestAnimationFrame(drawBg);
+      }
+      drawBg();
+    })();
+  </script>
+
+  <!-- Die Datei tsunami.zip muss im selben Verzeichnis liegen. -->
+</body>
+</html>
