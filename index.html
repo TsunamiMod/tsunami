@@ -483,7 +483,7 @@
   <!-- ---------- JAVASCRIPT: BACKGROUND CANVAS + VERSION SELECTOR ---------- -->
   <script>
     (function() {
-      // ----- BACKGROUND CANVAS (same as before, just kept) -----
+      // ----- BACKGROUND CANVAS -----
       const bgCanvas = document.getElementById('waveCanvas');
       const bgCtx = bgCanvas.getContext('2d');
       let width, height;
@@ -541,38 +541,34 @@
       }
       drawBg();
 
-      // ----- VERSION SELECTOR (dynamic, english) -----
-      // Wait for DOM to be fully loaded
+      // ----- VERSION SELECTOR (fixed) -----
       document.addEventListener('DOMContentLoaded', function() {
         const downloadArea = document.getElementById('downloadArea');
         if (!downloadArea) return;
 
-        // Clear any placeholder content
         downloadArea.innerHTML = '';
 
-        // Create version selector container
         const selectorDiv = document.createElement('div');
         selectorDiv.className = 'version-selector';
 
-        // Create select element
         const select = document.createElement('select');
         select.id = 'versionSelect';
         select.className = 'version-dropdown';
 
-        // Define versions from 1.21.1 to 1.21.11
+        // Generate versions 1.21.1 to 1.21.11
         const versions = [];
         for (let i = 1; i <= 11; i++) {
           versions.push(`1.21.${i}`);
         }
-        const availableVersions = ['1.21.8', '1.21.10'];
+        const availableVersions = ['1.21.8', '1.21.10'];  // both available
 
-        // Populate select options
+        // Populate dropdown
         versions.forEach(version => {
           const option = document.createElement('option');
           option.value = version;
           option.textContent = version;
-          if (version === availableVersion) {
-            option.textContent += '';
+          if (availableVersions.includes(version)) {
+            option.textContent += ' (ready)';
           } else {
             option.disabled = true;
             option.textContent += ' (not available)';
@@ -580,56 +576,42 @@
           select.appendChild(option);
         });
 
-        // Set default to available version
-        select.value = availableVersion;
+        // Set default to first available version
+        if (availableVersions.length > 0) {
+          select.value = availableVersions[0];
+        }
 
-        // Create download button
         const downloadBtn = document.createElement('button');
         downloadBtn.id = 'downloadBtn';
         downloadBtn.className = 'download-btn';
         downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Tsunami <i class="fas fa-file-zipper"></i>';
 
-        // Create note paragraph
         const note = document.createElement('p');
         note.className = 'version-note';
-        note.innerHTML = '<i class="fa-regular fa-clock"></i> Only version 1.21.8 is available. Others coming soon.';
+        note.innerHTML = '<i class="fa-regular fa-clock"></i> Available versions: 1.21.8 and 1.21.10. Others coming soon.';
 
-        // Assemble
         selectorDiv.appendChild(select);
         selectorDiv.appendChild(downloadBtn);
         downloadArea.appendChild(selectorDiv);
         downloadArea.appendChild(note);
 
-        // Disable button initially? No, because default is available version -> enabled
-        // But we add logic to enable/disable based on selection
+        // Enable/disable button based on selection
         const updateButtonState = () => {
           const selected = select.value;
-          if (selected === availableVersion) {
-            downloadBtn.disabled = false;
-          } else {
-            downloadBtn.disabled = true;
-          }
+          downloadBtn.disabled = !availableVersions.includes(selected);
         };
-
-        // Initial check
         updateButtonState();
-
-        // Listen to select changes
         select.addEventListener('change', updateButtonState);
 
         // Download action
         downloadBtn.addEventListener('click', function(e) {
           e.preventDefault();
           const selected = select.value;
-          if (selected === availableVersion) {
-            // Construct download link – assuming files are in "Versionen/" folder named "tsunami-{version}.jar"
-            // You can adjust the path/name pattern here if needed
-            const fileName = `tsunami-${selected}.jar`; // e.g. tsunami-1.21.8.jar
+          if (availableVersions.includes(selected)) {
+            const fileName = `tsunami-${selected}.jar`;
             const filePath = `Versionen/${fileName}`;
-            // Trigger download
             window.location.href = filePath;
           } else {
-            // Should not happen because button is disabled, but just in case
             alert('This version is not available for download yet.');
           }
         });
