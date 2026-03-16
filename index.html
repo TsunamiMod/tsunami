@@ -568,10 +568,10 @@
           option.value = version;
           option.textContent = version;
           if (availableVersions.includes(version)) {
-            option.textContent += ' (ready)';
+            option.textContent += ' ✔';
           } else {
             option.disabled = true;
-            option.textContent += ' (not available)';
+            option.textContent += ' ✕';
           }
           select.appendChild(option);
         });
