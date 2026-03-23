@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Tsunami · Performance Pack | Next-Gen Optimizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tsunami · Performance Pack</title>
 
-  <!-- LINKVERTISE SDK & INIT -->
+  <!-- LINKVERTISE -->
   <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
   <script>
-    // Monetization & ad gateway integration
     linkvertise(1459551, {
       whitelist: [],
       blacklist: [""]
@@ -48,7 +47,7 @@
       z-index: -1;
       pointer-events: none;
       display: block;
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
     /* ---------- MAIN LAYOUT ---------- */
@@ -95,7 +94,7 @@
       box-shadow: 0 0 15px cyan;
     }
 
-    /* ---------- DOWNLOAD SECTION (dynamic selector + monetization) ---------- */
+    /* ---------- DOWNLOAD SECTION (dynamic selector) ---------- */
     .download-area {
       display: flex;
       flex-direction: column;
@@ -361,110 +360,6 @@
       text-shadow: 0 0 6px cyan;
     }
 
-    /* ---------- SUPPORT/COMMUNITY ROW ---------- */
-    .support-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      margin: 3rem 0 2rem;
-    }
-
-    .support-card {
-      background: rgba(0, 20, 35, 0.7);
-      backdrop-filter: blur(8px);
-      border: 1px solid cyan;
-      border-radius: 60px;
-      padding: 1rem 2rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 1rem;
-      font-weight: 700;
-      font-size: 1.2rem;
-      transition: 0.2s;
-      color: white;
-      text-decoration: none;
-    }
-
-    .support-card i {
-      font-size: 1.8rem;
-      filter: drop-shadow(0 0 5px cyan);
-    }
-
-    .support-card:hover {
-      background: rgba(0, 150, 200, 0.6);
-      transform: scale(1.05);
-      border-color: white;
-      box-shadow: 0 0 30px cyan;
-    }
-
-    /* ---------- POPUP (Monetization overlay) ---------- */
-    #popup {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    #popup > div {
-      background: #0a1e2c;
-      border: 2px solid #00f2ff;
-      border-radius: 40px;
-      padding: 35px 40px;
-      text-align: center;
-      box-shadow: 0 0 70px cyan, 0 20px 35px black;
-      max-width: 400px;
-      width: 90%;
-      animation: glowPulse 0.4s ease-out;
-    }
-
-    @keyframes glowPulse {
-      0% { opacity: 0; transform: scale(0.95); box-shadow: 0 0 0 cyan; }
-      100% { opacity: 1; transform: scale(1); box-shadow: 0 0 70px cyan; }
-    }
-
-    #popup h2 {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      background: linear-gradient(135deg, #aaffff, #2f9eff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    #popup p {
-      font-size: 1.2rem;
-      margin-bottom: 25px;
-      color: #c7f0ff;
-    }
-
-    #popup button {
-      margin: 8px 12px;
-      padding: 12px 28px;
-      border-radius: 60px;
-      border: none;
-      font-weight: bold;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: 0.2s;
-      background: #0f3953;
-      color: white;
-      font-family: 'Space Grotesk', sans-serif;
-      border: 1px solid #0ff;
-    }
-
-    #popup button:hover {
-      background: #00ccff;
-      color: #0a141c;
-      transform: scale(1.05);
-      box-shadow: 0 0 20px cyan;
-    }
-
     /* ---------- FOOTER ---------- */
     .footer {
       margin-top: 5rem;
@@ -497,7 +392,6 @@
       .fact-item { padding: 0.8rem 1.2rem; }
       .fact-number { font-size: 2rem; }
       .specs-grid { grid-template-columns: 1fr; }
-      .support-row { gap: 1rem; }
     }
 
     @media (max-width: 450px) {
@@ -509,7 +403,7 @@
 </head>
 <body>
 
-  <!-- Canvas for dynamic wave background -->
+  <!-- Canvas for decorative background -->
   <canvas id="waveCanvas"></canvas>
 
   <div class="container">
@@ -519,10 +413,10 @@
       <span class="badge"><i class="fa-regular fa-folder-open"></i>  performance pack  <i class="fa-regular fa-folder-open"></i></span>
     </header>
 
-    <!-- DOWNLOAD AREA (dynamic selector + monetization popup) -->
+    <!-- DOWNLOAD AREA (dynamic version selector) -->
     <div class="download-area" id="downloadArea"></div>
 
-    <!-- FEATURE CARDS – performance optimizations -->
+    <!-- FEATURE CARDS – what EVERYONE wants: FPS boost & more -->
     <h2 class="feature-title"><i class="fa-regular fa-star" style="margin-right: 15px;"></i> OPTIMIZATIONS EVERYONE LOVES <i class="fa-regular fa-star" style="margin-left: 15px;"></i></h2>
     <div class="feature-grid">
       <div class="feature-card">
@@ -560,7 +454,7 @@
     <!-- FACTS COUNTER -->
     <div class="facts-row">
       <div class="fact-item">
-        <div class="fact-number">13K</div>
+        <div class="fact-number">13</div>
         <div class="fact-label">weekly downloads</div>
       </div>
       <div class="fact-item">
@@ -589,36 +483,17 @@
       </div>
     </div>
 
-    <!-- SUPPORT & DISCORD LINKS (Linkvertise powered) -->
-    <div class="support-row">
-      <a href="https://linkvertise.com/1459551/https://tsunami-project.com/support" target="_blank" class="support-card">
-        <i class="fas fa-heart"></i> Support Tsunami
-      </a>
-      <a href="https://linkvertise.com/1459551/https://discord.gg/TxYJDQRTFM" target="_blank" class="support-card">
-        <i class="fab fa-discord"></i> Join Discord
-      </a>
-    </div>
-
     <!-- FOOTER -->
     <footer class="footer">
       <i class="fa-regular fa-compass"></i> Tsunami – the wave is blue
-      <br><span style="opacity: 0.5; font-size: 0.8rem;">Made for gamers · 2026</span>
+      <br><span style="opacity: 0.5; font-size: 0.8rem;">Made for Tsunami · 2026</span>
     </footer>
   </div>
 
-  <!-- POPUP (monetization choice) -->
-  <div id="popup">
-    <div>
-      <h2>💙 Support Tsunami</h2>
-      <p>This helps us keep the project alive!<br>Choose your path:</p>
-      <button id="yes">Yes, support with ads 💰</button>
-      <button id="no">No, direct download ⚡</button>
-    </div>
-  </div>
-
+  <!-- ---------- JAVASCRIPT: BACKGROUND CANVAS + VERSION SELECTOR ---------- -->
   <script>
     (function() {
-      // ==================== BACKGROUND WAVE CANVAS ====================
+      // ----- BACKGROUND CANVAS -----
       const bgCanvas = document.getElementById('waveCanvas');
       const bgCtx = bgCanvas.getContext('2d');
       let width, height;
@@ -676,60 +551,51 @@
       }
       drawBg();
 
-      // ==================== VERSION SELECTOR + MONETIZATION POPUP (merged from first HTML) ====================
-      const downloadArea = document.getElementById('downloadArea');
-      if (downloadArea) {
-        // Clear any placeholder content
+      // ----- VERSION SELECTOR (fixed) -----
+      document.addEventListener('DOMContentLoaded', function() {
+        const downloadArea = document.getElementById('downloadArea');
+        if (!downloadArea) return;
+
         downloadArea.innerHTML = '';
 
-        // Create version selector container
         const selectorDiv = document.createElement('div');
         selectorDiv.className = 'version-selector';
 
-        // Create dropdown (select)
         const select = document.createElement('select');
         select.id = 'versionSelect';
         select.className = 'version-dropdown';
 
-        // Versions 1.21.1 -> 1.21.10
+        // Generate versions 1.21.1 to 1.21.11
         const versions = [];
         for (let i = 1; i <= 10; i++) {
           versions.push(`1.21.${i}`);
         }
-        // Available versions as per first code (identical to second's list)
-        const availableVersions = [
-          '1.21.8', '1.21.10', '1.21.4', '1.21.5',
-          '1.21.6', '1.21.7', '1.21.9', '1.21.3',
-          '1.21.2', '1.21.1'
-        ];
+        const availableVersions = ['1.21.8', '1.21.10', '1.21.4', '1.21.5', '1.21.6', '1.21.7', '1.21.9', '1.21.3', '1.21.2', '1.21.1'];  // both available
 
-        // Populate dropdown with ✔ / ✕
+        // Populate dropdown
         versions.forEach(version => {
           const option = document.createElement('option');
           option.value = version;
-          let displayText = version;
+          option.textContent = version;
           if (availableVersions.includes(version)) {
-            displayText += ' ✔';
+            option.textContent += ' ✔';
           } else {
-            displayText += ' ✕';
             option.disabled = true;
+            option.textContent += ' ✕';
           }
-          option.textContent = displayText;
           select.appendChild(option);
         });
 
-        // Set default to first available (usually 1.21.8)
-        if (availableVersions.length) {
+        // Set default to first available version
+        if (availableVersions.length > 0) {
           select.value = availableVersions[0];
         }
 
-        // Create download button
         const downloadBtn = document.createElement('button');
         downloadBtn.id = 'downloadBtn';
         downloadBtn.className = 'download-btn';
         downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Tsunami <i class="fas fa-file-zipper"></i>';
 
-        // Version note
         const note = document.createElement('p');
         note.className = 'version-note';
         note.innerHTML = '<i class="fa-regular fa-clock"></i> More Versions are coming soon.';
@@ -739,73 +605,27 @@
         downloadArea.appendChild(selectorDiv);
         downloadArea.appendChild(note);
 
-        // Enable/disable download button based on selection availability
-        function updateButtonState() {
-          const selectedVer = select.value;
-          downloadBtn.disabled = !availableVersions.includes(selectedVer);
-        }
+        // Enable/disable button based on selection
+        const updateButtonState = () => {
+          const selected = select.value;
+          downloadBtn.disabled = !availableVersions.includes(selected);
+        };
         updateButtonState();
         select.addEventListener('change', updateButtonState);
 
-        // ---------- POPUP HANDLING (Linkvertise integration) ----------
-        const popup = document.getElementById('popup');
-        const yesBtn = document.getElementById('yes');
-        const noBtn = document.getElementById('no');
-        let pendingUrl = null;
-
-        // Helper: close popup
-        function closePopup() {
-          if (popup) popup.style.display = 'none';
-        }
-
-        // Show popup only when valid version selected
-        downloadBtn.addEventListener('click', (e) => {
+        // Download action
+        downloadBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          const selectedVersion = select.value;
-          if (!availableVersions.includes(selectedVersion)) {
+          const selected = select.value;
+          if (availableVersions.includes(selected)) {
+            const fileName = `tsunami-${selected}.jar`;
+            const filePath = `Versionen/${fileName}`;
+            window.location.href = filePath;
+          } else {
             alert('This version is not available for download yet.');
-            return;
           }
-          // Build direct file path (relative) – same structure as original
-          const directUrl = `Versionen/tsunami-${selectedVersion}.jar`;
-          pendingUrl = directUrl;
-
-          // Show popup for monetization choice
-          if (popup) popup.style.display = 'flex';
         });
-
-        // YES: redirect via Linkvertise (ad monetization)
-        if (yesBtn) {
-          yesBtn.addEventListener('click', () => {
-            if (pendingUrl) {
-              // Encode full pending URL as param for linkvertise gateway
-              const gateway = `https://linkvertise.com/1459551/${encodeURIComponent(pendingUrl)}`;
-              window.location.href = gateway;
-            } else {
-              closePopup();
-            }
-          });
-        }
-
-        // NO: direct download (skip ads)
-        if (noBtn) {
-          noBtn.addEventListener('click', () => {
-            if (pendingUrl) {
-              window.location.href = pendingUrl;
-            }
-            closePopup();
-          });
-        }
-
-        // Click outside popup background to close? Not needed, but adds UX
-        if (popup) {
-          popup.addEventListener('click', (e) => {
-            if (e.target === popup) {
-              closePopup();
-            }
-          });
-        }
-      }
+      });
     })();
   </script>
 </body>
